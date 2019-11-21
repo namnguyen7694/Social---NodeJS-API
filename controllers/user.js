@@ -20,13 +20,10 @@ exports.userById = (req, res, next, id) => {
 };
 
 exports.hasAuthorization = (req, res, next) => {
+    //only Admin or user has Signin can update/delete themself
     let sameUser = req.profile && req.auth && req.profile._id == req.auth._id;
     let adminUser = req.profile && req.auth && req.auth.role === 'admin';
-
     const authorized = sameUser || adminUser;
-
-    // console.log("req.profile ", req.profile, " req.auth ", req.auth);
-    // console.log("SAMEUSER", sameUser, "ADMINUSER", adminUser);
 
     if (!authorized) {
         return res.status(403).json({
@@ -48,26 +45,10 @@ exports.allUsers = (req, res) => {
 };
 
 exports.getUser = (req, res) => {
-    req.profile.hashed_password = undefined;
     req.profile.salt = undefined;
     return res.json(req.profile);
 };
 
-// exports.updateUser = (req, res, next) => {
-//     let user = req.profile;
-//     user = _.extend(user, req.body); // extend - mutate the source object
-//     user.updated = Date.now();
-//     user.save(err => {
-//         if (err) {
-//             return res.status(400).json({
-//                 error: "You are not authorized to perform this action"
-//             });
-//         }
-//         user.hashed_password = undefined;
-//         user.salt = undefined;
-//         res.json({ user });
-//     });
-// };
 
 exports.updateUser = (req, res, next) => {
     let form = new formidable.IncomingForm();
@@ -98,7 +79,6 @@ exports.updateUser = (req, res, next) => {
                     error: err
                 });
             }
-            user.hashed_password = undefined;
             user.salt = undefined;
             // console.log("user after update with formdata: ", user);
             res.json(user);

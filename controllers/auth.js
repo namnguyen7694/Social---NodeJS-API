@@ -30,6 +30,7 @@ exports.signin = (req, res) => {
             const user =result[1];
             if (!isMatch) return Promise.reject({status:400, message: "Password incorrect"})
             const payload = {
+                _id : user._id,
                 email : user.email,
                 role : user.role
             }
@@ -55,13 +56,27 @@ exports.requireSignin = (req, res, next) => {
     verifyJwt(token, process.env.JWT_SECRET)
         .then(decoded => {
             if (decoded) {
-                req.user = decoded
+                req.auth = decoded
+                console.log("auth id: ", req.auth._id);
                 return next()
             }
         })
         .catch( ()=> res.status(401).json({message: "Require Sign in to continue"}))
 }
 
+// exports.getMe = (req, res) => {
+
+//     console.log(req.auth._id);
+//     User.findById(req.auth._id)
+//     .exec((err, user) => {
+//         if (err || !user) {
+//             return res.status(400).json({
+//                 error: 'You may not Sign in'
+//             });
+//         }
+//         return res.json(user);
+//     })
+// }
 
 exports.forgotPassword = (req, res) => {
     // if (!req.body.email) return res.status(400).json({ message: 'No Email in request body' });

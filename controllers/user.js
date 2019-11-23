@@ -15,6 +15,7 @@ exports.userById = (req, res, next, id) => {
                 });
             }
             req.profile = user; // adds profile object in req with user info
+            console.log(`Found user : ${req.profile.name}`);
             next();
         });
 };
@@ -45,14 +46,13 @@ exports.allUsers = (req, res) => {
 };
 
 exports.getUser = (req, res) => {
-    req.profile.salt = undefined;
     return res.json(req.profile);
 };
 
 
 exports.updateUser = (req, res, next) => {
     let form = new formidable.IncomingForm();
-    // console.log("incoming form data: ", form);
+
     form.keepExtensions = true;
     form.parse(req, (err, fields, files) => {
         if (err) {
@@ -79,8 +79,6 @@ exports.updateUser = (req, res, next) => {
                     error: err
                 });
             }
-            user.salt = undefined;
-            // console.log("user after update with formdata: ", user);
             res.json(user);
         });
     });
@@ -126,8 +124,6 @@ exports.addFollower = (req, res) => {
                     error: err
                 });
             }
-            result.hashed_password = undefined;
-            result.salt = undefined;
             res.json(result);
         });
 };
@@ -152,8 +148,6 @@ exports.removeFollower = (req, res) => {
                     error: err
                 });
             }
-            result.hashed_password = undefined;
-            result.salt = undefined;
             res.json(result);
         });
 };

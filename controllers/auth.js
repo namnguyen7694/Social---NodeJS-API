@@ -64,20 +64,6 @@ exports.requireSignin = (req, res, next) => {
         .catch( ()=> res.status(401).json({message: "Require Sign in to continue"}))
 }
 
-// exports.getMe = (req, res) => {
-
-//     console.log(req.auth._id);
-//     User.findById(req.auth._id)
-//     .exec((err, user) => {
-//         if (err || !user) {
-//             return res.status(400).json({
-//                 error: 'You may not Sign in'
-//             });
-//         }
-//         return res.json(user);
-//     })
-// }
-
 exports.forgotPassword = (req, res) => {
     // if (!req.body.email) return res.status(400).json({ message: 'No Email in request body' });
     const { email } = req.body;

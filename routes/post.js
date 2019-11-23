@@ -39,9 +39,9 @@ router.put('/post/comment', requireSignin, comment);
 router.put('/post/uncomment', requireSignin, uncomment);
 router.put('/post/updatecomment', requireSignin, updateComment);
 
-// any route containing :userId, our app will first execute userById()
+// any route containing :userId, app will first execute userById()
 router.param('userId', userById);
-// any route containing :postId, our app will first execute postById()
+// any route containing :postId, app will first execute postById()
 router.param('postId', postById);
 
 module.exports = router;

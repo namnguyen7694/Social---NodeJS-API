@@ -16,6 +16,7 @@ exports.postById = (req, res, next, id) => {
                 });
             }
             req.post = post;
+            console.log(`Found Post : ${req.post.title}`);
             next();
         });
 };
@@ -30,8 +31,6 @@ exports.createPost = (req, res, next) => {
             });
         }
         let post = new Post(fields);
-
-        req.profile.salt = undefined;
         post.postedBy = req.profile;
 
         if (files.photo) {

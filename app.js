@@ -18,7 +18,8 @@ const MONGO_URI="mongodb://localhost:27017/social";
 // mongodb+srv://robertchou_admin:Aeiourc2491@nodeapi-p2o93.mongodb.net/nodeapi?retryWrites=true&w=majority
 mongoose
     .connect(MONGO_URI, {
-        useNewUrlParser: true
+        useNewUrlParser: true,
+        useUnifiedTopology: true
     })
     .then(() => console.log('DB Connected'));
 

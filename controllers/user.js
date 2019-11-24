@@ -45,6 +45,10 @@ exports.allUsers = (req, res) => {
     }).select('name email updated created role');
 };
 
+exports.getMe = (req, res) => {
+    return res.json(req.auth)
+}
+
 exports.getUser = (req, res) => {
     return res.json(req.profile);
 };
@@ -60,9 +64,8 @@ exports.updateUser = (req, res, next) => {
                 error: 'Photo could not be uploaded'
             });
         }
-        // save user
+       
         let user = req.profile;
-        // console.log("user in update: ", user);
         user = _.extend(user, fields);
 
         user.updated = Date.now();
@@ -106,7 +109,7 @@ exports.deleteUser = (req, res, next) => {
 
 // follow unfollow
 exports.addFollowing = (req, res, next) => {
-    User.findByIdAndUpdate(req.body.userId, { $push: { following: req.body.followId } }, (err, result) => {
+    User.findByIdAndUpdate(req.auth._id, { $push: { following: req.body.followId } }, (err, result) => {
         if (err) {
             return res.status(400).json({ error: err });
         }
@@ -115,7 +118,7 @@ exports.addFollowing = (req, res, next) => {
 };
 
 exports.addFollower = (req, res) => {
-    User.findByIdAndUpdate(req.body.followId, { $push: { followers: req.body.userId } }, { new: true })
+    User.findByIdAndUpdate(req.body.followId, { $push: { followers: req.auth._id } }, { new: true })
         .populate('following', '_id name')
         .populate('followers', '_id name')
         .exec((err, result) => {
@@ -130,7 +133,7 @@ exports.addFollower = (req, res) => {
 
 // remove follow unfollow
 exports.removeFollowing = (req, res, next) => {
-    User.findByIdAndUpdate(req.body.userId, { $pull: { following: req.body.unfollowId } }, (err, result) => {
+    User.findByIdAndUpdate(req.auth._id, { $pull: { following: req.body.unfollowId } }, (err, result) => {
         if (err) {
             return res.status(400).json({ error: err });
         }
@@ -139,7 +142,7 @@ exports.removeFollowing = (req, res, next) => {
 };
 
 exports.removeFollower = (req, res) => {
-    User.findByIdAndUpdate(req.body.unfollowId, { $pull: { followers: req.body.userId } }, { new: true })
+    User.findByIdAndUpdate(req.body.unfollowId, { $pull: { followers: req.auth._id } }, { new: true })
         .populate('following', '_id name')
         .populate('followers', '_id name')
         .exec((err, result) => {

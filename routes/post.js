@@ -31,13 +31,13 @@ router.delete('/post/:postId', requireSignin, isPoster, deletePost);
 // photo
 router.get('/post/photo/:postId', photo);
 // like unlike
-router.put('/post/like', requireSignin, like);
-router.put('/post/unlike', requireSignin, unlike);
+router.put('/posts/like', requireSignin, like);
+router.put('/posts/unlike', requireSignin, unlike);
 
 // comments
-router.put('/post/comment', requireSignin, comment);
-router.put('/post/uncomment', requireSignin, uncomment);
-router.put('/post/updatecomment', requireSignin, updateComment);
+router.put('/posts/comment', requireSignin, comment);
+router.put('/posts/uncomment', requireSignin, uncomment);
+router.put('/posts/updatecomment', requireSignin, updateComment);
 
 // any route containing :userId, app will first execute userById()
 router.param('userId', userById);

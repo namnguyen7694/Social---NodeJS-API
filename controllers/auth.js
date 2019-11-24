@@ -34,7 +34,7 @@ exports.signin = (req, res) => {
                 email : user.email,
                 role : user.role
             }
-            return jwtSign(payload, process.env.JWT_SECRET, {expiresIn: 1800})
+            return jwtSign(payload, process.env.JWT_SECRET)  //{expiresIn: 1800}
         })
         .then(token => {
             res.cookie('t', token, {expire: new Date() + 9999})
@@ -65,7 +65,6 @@ exports.requireSignin = (req, res, next) => {
 }
 
 exports.forgotPassword = (req, res) => {
-    // if (!req.body.email) return res.status(400).json({ message: 'No Email in request body' });
     const { email } = req.body;
     User.findOne({ email })
         .then(user => {
@@ -75,7 +74,7 @@ exports.forgotPassword = (req, res) => {
                 _id: user._id,
                 iss: process.env.APP_NAME
             }
-            return Promise.all([jwtSign(payload2, process.env.JWT_SECRET, { expiresIn: 600 }),user])
+            return Promise.all([jwtSign(payload2, process.env.JWT_SECRET, { expiresIn: 600 }), user])
         })
         .then(result => {
             const user = result[1]
